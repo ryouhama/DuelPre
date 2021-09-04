@@ -3,6 +3,7 @@ from library.card.domains.domain.card.value_object import CardId
 from library.card.applications.dto.conditions.card_conditions import CardConditions
 from library.card.domains.domain.card.domain import Card, Cards
 
+
 class CardRepositoryInterface(ABC):
 
     @abstractmethod
