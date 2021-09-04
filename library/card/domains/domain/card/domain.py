@@ -1,8 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from library.card.domains.domain.card.value_object import CardId
-from library.card.domains.exception import DomainNotCreatedException
-from typing import Dict, List
+from card.domains.domain.card.value_object import CardId
+from typing import Any, Dict, List, Optional
 from enum import Enum
 
 
@@ -19,12 +18,23 @@ class Card():
     """
     カードデータ
     """
-    id: CardId
+    id: Optional[CardId]
     name: str
     cost: int
     effect_document: str
     picture_path: str
     civilizations: Civilizations
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = {
+            'id': self.id.value if self.id else None,
+            'mame': self.name,
+            'cost': self.cost,
+            'effect_document': self.effect_document,
+            'picture_path': self.picture_path
+        }
+        data.update(self.civilizations.to_dict())
+        return data
 
 
 @dataclass
@@ -72,6 +82,4 @@ class Civilization(Enum):
         elif args_name == cls.darkness.name:
             return Civilization[cls.darkness]
         else:
-            DomainNotCreatedException(
-                domain=cls, message=f'文明は存在しません args={args_name}'
-            )
+            raise Exception(f'文明は存在しません args={args_name}')

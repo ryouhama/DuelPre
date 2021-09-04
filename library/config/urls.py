@@ -21,6 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(
         'api/',
-        include('card.urls', namespace='card_url')
+        include('card.adapters.urls', namespace='card_url')
     ),
 ]

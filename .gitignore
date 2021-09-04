@@ -1,9 +1,7 @@
 # ignore python files
 __pycache__
 db.sqlite3
-
-# local settings
-local.py
+.env
 
 # migrations
 migrations/
