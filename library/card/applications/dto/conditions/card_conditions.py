@@ -3,6 +3,7 @@ from library.card.domains.domain.card.value_object import CardId
 from library.card.domains.domain.card.domain import Civilizations
 from typing import Any, Dict, Optional
 
+
 @dataclass
 class CardConditions():
     """

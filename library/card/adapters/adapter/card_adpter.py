@@ -3,6 +3,7 @@ from library.card.models.card import models
 from library.card.serializers.card import serializer
 from django.db.models import BaseManager
 
+
 class CardAdapter():
     model_data: BaseManager[models.Card]
 

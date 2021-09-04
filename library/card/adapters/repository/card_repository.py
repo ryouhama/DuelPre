@@ -3,7 +3,8 @@ from library.card.adapters.adapter.card_adpter import CardAdapter
 from library.card.applications.dto.conditions.card_conditions import CardConditions
 from library.card.domains.domain.card.value_object import CardId
 from library.card.domains.domain.card.domain import Card, Cards
-from library.card.applications.repository_interface.card_repostiroy_interface import CardRepositoryInterface
+from library.card.applications.repository_interface.card_repostiroy_interface\
+     import CardRepositoryInterface
 from library.card.models.card import models
 
 

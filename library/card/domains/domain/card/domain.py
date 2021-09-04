@@ -13,6 +13,7 @@ class Cards():
     """
     items: List[Card]
 
+
 @dataclass
 class Card():
     """
@@ -41,6 +42,7 @@ class Civilizations():
         return {
             'civilizations': [it.name for it in self.items]
         }
+
 
 @dataclass
 class Civilization(Enum):
@@ -73,4 +75,3 @@ class Civilization(Enum):
             DomainNotCreatedException(
                 domain=cls, message=f'文明は存在しません args={args_name}'
             )
-        

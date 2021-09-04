@@ -14,6 +14,7 @@ class CardFactory():
             civilizations=CivilizationsFactory(data)
         )
 
+
 class CivilizationsFactory():
     def create(self, data: Dict[str, Any]) -> Civilizations:
         civilizations_data: List[str] = data['civilizations']

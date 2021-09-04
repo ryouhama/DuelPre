@@ -2,6 +2,7 @@ from django.db.models.manager import BaseManager
 from rest_framework import serializers
 from card.models.card import models
 
+
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Card
@@ -13,10 +14,12 @@ class CardSerializer(serializers.ModelSerializer):
             'civilization__civilizations'
         )
 
+
 class CivilizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Civilization
         fields = '__all__'
+
 
 class CardFetchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,5 +27,5 @@ class CardFetchSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        data =  super().to_representation(instance)
+        data = super().to_representation(instance)
         data['civilizations'] = CivilizationSerializer(data=instance.civilizations, many=True)
