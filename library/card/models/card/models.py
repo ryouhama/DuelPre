@@ -20,7 +20,8 @@ class CardCivilization(CommonModel):
     class Meta:
         db_table = 'カード-文明'
 
-    card = models.OneToOneField('Card', on_delete=models.CASCADE, related_name='civilization')
+    card = models.OneToOneField(
+        'Card', on_delete=models.CASCADE, related_name='civilization')
     civilizations = models.ForeignKey(
         'Civilization', on_delete=models.CASCADE, related_name='cards'
     )
@@ -31,11 +32,11 @@ class Civilization(CommonModel):
         db_table = '文明'
 
     CIVILIZATION_TYPES = (
-      ('fire', '火'),
-      ('water', '水'),
-      ('natural', '自然'),
-      ('light', '光'),
-      ('darkness', '闇')
+        ('fire', '火'),
+        ('water', '水'),
+        ('natural', '自然'),
+        ('light', '光'),
+        ('darkness', '闇')
     )
 
     name = models.CharField(choices=CIVILIZATION_TYPES, max_length=8)

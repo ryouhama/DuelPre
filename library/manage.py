@@ -2,19 +2,12 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from library.settings import settings
-
-
-def import_local_settings():
-    if os.path.exists(f'{settings.BASE_DIR}/local.py'):
-        import library.settings.local # noqa
 
 
 def main():
     os.environ.setdefault(
-        'DJANGO_SETTINGS_MODULE', 'library.settings.settings'
+        'DJANGO_SETTINGS_MODULE', 'config.settings.local'
     )
-    import_local_settings()
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
