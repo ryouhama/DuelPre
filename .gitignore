@@ -7,3 +7,5 @@ local.py
 
 # migrations
 migrations/
+
+.backup/
