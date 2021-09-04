@@ -8,7 +8,7 @@ from enum import Enum
 @dataclass
 class Cards():
     """
-    カードの複数ドメイン
+    AggregateCard
     """
     items: List[Card]
 
@@ -40,7 +40,7 @@ class Card():
 @dataclass
 class Civilizations():
     """
-    文明の複数ドメイン
+    AggregateCivilization
     """
     items: List[Civilization]
 
@@ -82,4 +82,4 @@ class Civilization(Enum):
         elif args_name == cls.darkness.name:
             return Civilization[cls.darkness]
         else:
-            raise Exception(f'文明は存在しません args={args_name}')
+            raise Exception(f'Civilization not exist: args={args_name}')
