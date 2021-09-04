@@ -4,15 +4,10 @@ import os
 import sys
 
 
-def import_local_settings():
-    try:
-        import library.settings.local # type: ignore
-    except:
-        pass
-
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'library.settings.settings')
-    import_local_settings()
+    os.environ.setdefault(
+        'DJANGO_SETTINGS_MODULE', 'config.settings.local'
+    )
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

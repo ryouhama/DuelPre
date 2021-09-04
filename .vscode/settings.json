@@ -1,0 +1,4 @@
+{
+    "git.ignoreLimitWarning": true,
+    "python.linting.flake8Enabled": true
+}
