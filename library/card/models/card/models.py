@@ -19,7 +19,7 @@ class Card(CommonModel):
 
 class CardCivilization(CommonModel):
     class Meta:
-        db_table = '文明'
+        db_table = 'カード-文明'
 
     card = models.OneToOneField('Card',on_delete=models.CASCADE, related_name='civilization')
     civilizations = models.ForeignKey('Civilization', on_delete=models.CASCADE, related_name='cards')
