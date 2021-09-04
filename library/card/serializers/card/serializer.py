@@ -1,4 +1,4 @@
-from django.db.models import fields
+from django.db.models.manager import BaseManager
 from rest_framework import serializers
 from card.models.card import models
 
@@ -6,6 +6,12 @@ class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Card
         fields = '__all__'
+
+    @classmethod
+    def eager_load(cls, model_data: BaseManager[models.Card]) -> BaseManager[models.Card]:
+        return model_data.prefetch_related(
+            'civilization__civilizations'
+        )
 
 class CivilizationSerializer(serializers.ModelSerializer):
     class Meta:
