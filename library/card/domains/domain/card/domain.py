@@ -28,7 +28,7 @@ class Card():
     def to_dict(self) -> Dict[str, Any]:
         data = {
             'id': self.id.value if self.id else None,
-            'mame': self.name,
+            'name': self.name,
             'cost': self.cost,
             'effect_document': self.effect_document,
             'picture_path': self.picture_path
@@ -50,7 +50,7 @@ class Civilizations():
     def to_dict(self) -> Dict[str, str]:
         self.sort()
         return {
-            'civilizations': [it.name for it in self.items]
+            'civilizations': [it.value[0] for it in self.items]
         }
 
 
@@ -71,15 +71,15 @@ class Civilization(Enum):
         引数(args_name)で指定された文明のドメインのオブジェクトを返す
         指定された文明が存在しない場合、例外を上げる
         """
-        if args_name == cls.fire.name:
-            return Civilization[cls.fire]
-        elif args_name == cls.water.name:
-            return Civilization[cls.water]
-        elif args_name == cls.natural.name:
-            return Civilization[cls.natural]
-        elif args_name == cls.light.name:
-            return Civilization[cls.light]
-        elif args_name == cls.darkness.name:
-            return Civilization[cls.darkness]
+        if args_name == cls.fire.value[0]:
+            return Civilization(cls.fire)
+        elif args_name == cls.water.value[0]:
+            return Civilization(cls.water)
+        elif args_name == cls.natural.value[0]:
+            return Civilization(cls.natural)
+        elif args_name == cls.light.value[0]:
+            return Civilization(cls.light)
+        elif args_name == cls.darkness.value[0]:
+            return Civilization(cls.darkness)
         else:
             raise Exception(f'Civilization not exist: args={args_name}')
