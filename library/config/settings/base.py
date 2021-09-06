@@ -35,7 +35,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+SHELL_PLUS = "ptpython"
 ALLOWED_HOSTS = []
 
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'card.apps.CardConfig',
     # Third party apps
     'rest_framework',
+    'django_extensions',
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
