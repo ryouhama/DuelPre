@@ -33,8 +33,7 @@ class CardFetchView(APIView):
         """
         カードデータを一覧取得する
         """
-        card_usecase = CardUsecase()
-        data = card_usecase.fetch(request.data)
+        data = self.usecase.fetch(request.data)
         return Response(data=data, status=status.HTTP_200_OK)
 
 

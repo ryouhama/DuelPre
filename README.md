@@ -14,4 +14,7 @@ p update
 p run flake8
 ```
 
-# front
+### pytest
+```shell
+pytest
+```

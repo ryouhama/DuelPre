@@ -18,10 +18,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 env = environ.Env()
-READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=False)
-if READ_DOT_ENV_FILE:
+DJANGO_READ_ENV_FILE = env.bool('DJANGO_READ_ENV_FILE', default=False)
+if DJANGO_READ_ENV_FILE:
     # OS environment variables take precedence over variables from .env
-    ROOT_DIR = environ.Path(__file__) - 3
+    # ROOT_DIR=library.settings
+    ROOT_DIR = environ.Path(__file__) - 1
     env.read_env(str(ROOT_DIR.path('.env')))
 
 
@@ -34,7 +35,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+SHELL_PLUS = "ptpython"
 ALLOWED_HOSTS = []
 
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'card.apps.CardConfig',
     # Third party apps
     'rest_framework',
+    'django_extensions',
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
