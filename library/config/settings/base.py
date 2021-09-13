@@ -22,7 +22,7 @@ DJANGO_READ_ENV_FILE = env.bool('DJANGO_READ_ENV_FILE', default=False)
 if DJANGO_READ_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     # ROOT_DIR=library.settings
-    ROOT_DIR = environ.Path(__file__) - 1
+    ROOT_DIR = environ.Path(__file__) - 4
     env.read_env(str(ROOT_DIR.path('.env')))
 
 
