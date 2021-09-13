@@ -11,19 +11,18 @@ class Card(CommonModel):
     effect_document = models.CharField(max_length=1000)
     picture_path = models.CharField(max_length=200)
 
-    @property
-    def civilizations(self):
-        return self.civilization.civilizations.all()
-
 
 class CardCivilization(CommonModel):
     class Meta:
         db_table = 'カード-文明'
 
-    card = models.OneToOneField(
-        'Card', on_delete=models.CASCADE, related_name='civilization')
-    civilizations = models.ForeignKey(
-        'Civilization', on_delete=models.CASCADE, related_name='cards'
+    card = models.ForeignKey(
+        'Card', on_delete=models.CASCADE, related_name='civilizations'
+    )
+    civilization = models.OneToOneField(
+        'Civilization',
+        on_delete=models.CASCADE,
+        related_name='card_civilization'
     )
 
 

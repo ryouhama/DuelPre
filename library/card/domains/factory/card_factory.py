@@ -14,20 +14,25 @@ class CardFactory:
     def create(self) -> Card:
         self.is_valid()
         return Card(
-            id=CardId(self.data['id']) if hasattr(self.data, 'id') else None,
+            id=CardId(self.data['id']) if self.data.get('id', None) else None,
             name=self.data['name'],
             cost=self.data['cost'],
             effect_document=self.data['effect_document'],
             picture_path=self.data['picture_path'],
-            civilizations=CivilizationsFactory(self.data)
+            civilizations=CivilizationsFactory(self.data).create()
         )
 
     def is_valid(self) -> bool:
-        assert hasattr(self.data, 'name')
-        assert hasattr(self.data, 'cost')
-        assert hasattr(self.data, 'effect_document')
-        assert hasattr(self.data, 'picture_path')
-        assert hasattr(self.data, 'civilizations')
+        required_set = {
+            'name',
+            'cost',
+            'effect_document',
+            'picture_path',
+            'civilizations'
+        }
+        result = required_set == required_set & {it for it in self.data.keys()}
+        if not result:
+            raise Exception('Validate error: object=Card')
         return True
 
 
@@ -38,5 +43,8 @@ class CivilizationsFactory():
     def create(self) -> Civilizations:
         civilizations_data: List[str] = self.data['civilizations']
         return Civilizations(
-            items=[Civilization.to_domain(it) for it in civilizations_data]
+            items=[
+                Civilization.to_domain(it['name'])
+                for it in civilizations_data
+            ]
         )

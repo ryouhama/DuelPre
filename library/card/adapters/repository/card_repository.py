@@ -19,8 +19,8 @@ class CardRepository(CardRepositoryInterface):
 
     def get(self, id: CardId) -> Card:
         model_card = models.Card.objects.get(id=id.value)
-        data = CardSerializer(instance=model_card, patial=True).data
-        return CardFactory().create(data)
+        data = CardSerializer(instance=model_card, partial=True).data
+        return CardFactory(data).create()
 
     def fetch_by_condition(self, dto: CardConditionDto) -> Cards:
         model_data = models.Card.objects.filter(
@@ -29,7 +29,7 @@ class CardRepository(CardRepositoryInterface):
         related_model_data = CardFetchSerializer.eager_load(model_data)
         data = CardFetchSerializer(instance=related_model_data, many=True).data
         return Cards(
-            [CardFactory().create(it) for it in data]
+            [CardFactory(it).create() for it in data]
         )
 
     def create(self, card: Card) -> None:
