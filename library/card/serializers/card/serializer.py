@@ -8,6 +8,17 @@ class CardSerializer(serializers.ModelSerializer):
         model = models.Card
         fields = '__all__'
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        civilizations = [
+            it.civilization for it in instance.civilizations.all()
+        ]
+        civilization_serializer = CivilizationSerializer(
+            data=civilizations, many=True)
+        civilization_serializer.is_valid()
+        data['civilizations'] = civilization_serializer.data
+        return data
+
 
 class CardCivilizationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,13 +34,19 @@ class CivilizationSerializer(serializers.ModelSerializer):
 
 class CardFetchSerializer(serializers.ModelSerializer):
     class Meta:
-        models = models.Card
+        model = models.Card
         fields = '__all__'
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['civilizations'] = CivilizationSerializer(
-            data=instance.civilizations, many=True)
+        civilizations = [
+            it.civilization for it in instance.civilizations.all()
+        ]
+        civilization_serializer = CivilizationSerializer(
+            data=civilizations, many=True)
+        civilization_serializer.is_valid()
+        data['civilizations'] = civilization_serializer.data
+        return data
 
     @classmethod
     def eager_load(
@@ -37,5 +54,5 @@ class CardFetchSerializer(serializers.ModelSerializer):
         model_data: BaseManager[models.Card]
     ) -> BaseManager[models.Card]:
         return model_data.prefetch_related(
-            'civilization__civilizations'
+            'civilizations__civilization'
         )
