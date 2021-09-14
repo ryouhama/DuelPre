@@ -1,6 +1,6 @@
 from django.urls import path
 
-from card.adapters.views import card_view
+from card.applications.views import card_view
 
 app_name = 'card'
 
@@ -12,5 +12,9 @@ urlpatterns = [
         card_view.CardView.as_view(),
         name='card_detail'
     ),
-    path('cards/', card_view.CardView.as_view(), name='card_detail_create')
+    path(
+        'cards/create/',
+        card_view.CardView.as_view(),
+        name='card_detail_create'
+    )
 ]

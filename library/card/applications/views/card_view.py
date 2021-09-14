@@ -5,7 +5,6 @@ from card.applications.repository_interface.card_repostiroy_interface \
     import CardRepositoryInterface
 from card.applications.usecases.card.usecase import CardUsecase
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.request import Request
@@ -41,7 +40,6 @@ class CardView(APIView):
     """
     カードView
     """
-    permission_classes = [AllowAny]
     usecase: CardUsecase
 
     class InjectConfig(Module):
@@ -65,5 +63,5 @@ class CardView(APIView):
         """
         カードデータを作成する
         """
-        data = self.usecase.get(request.data)
+        data = self.usecase.create(request.data)
         return Response(data=data, status=status.HTTP_201_CREATED)
