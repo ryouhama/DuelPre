@@ -22,7 +22,7 @@ class CardRepositoryInterface(ABC):
         raise NotImplementedError()
 
     @abstractclassmethod
-    def create(self, card: Card) -> Card:
+    def create(self, dto) -> CardId:
         """
         カードデータを作成する
         """

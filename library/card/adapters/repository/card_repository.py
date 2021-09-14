@@ -1,5 +1,4 @@
-from typing import Optional
-from django.db.models.query_utils import Q
+from card.adapters.adpter.card_condition_adapter import CardConditionAdapter
 from card.domains.factory.card_factory import CardFactory
 from card.applications.dto.conditions.card_conditions \
     import CardConditionDto
@@ -23,8 +22,9 @@ class CardRepository(CardRepositoryInterface):
         return CardFactory(data).create()
 
     def fetch_by_condition(self, dto: CardConditionDto) -> Cards:
+        adapter = CardConditionAdapter(dto)
         model_data = models.Card.objects.filter(
-            self.to_condition(dto)
+            adapter.to_query_condition()
         )
         related_model_data = CardFetchSerializer.eager_load(model_data)
         data = CardFetchSerializer(instance=related_model_data, many=True).data
@@ -64,27 +64,3 @@ class CardRepository(CardRepositoryInterface):
                 raise Exception(card_civilization_serializer.errors)
 
         return self.get(CardId(created_card.pk))
-
-    def to_condition(self, dto: CardConditionDto) -> Q:
-        conditions = None
-        if dto.id:
-            conditions = Q(id=dto.id)
-        if dto.keyward:
-            self.__add_conditions(
-                prev=conditions,
-                add=Q(name_startwith=dto.keyward)
-            )
-        if dto.civilizations:
-            values = [it for it in dto.civilizations]
-            add_condition = Q(civilization__civilizations__name_in=values)
-            self.__add_conditions(
-                prev=conditions,
-                add=add_condition
-            )
-        return conditions if conditions else Q()
-
-    def __add_conditions(self, prev: Optional[Q], add: Q) -> Q:
-        """
-        prev条件に、ANDでadd条件を追加する
-        """
-        return Q(prev, add) if prev else add
