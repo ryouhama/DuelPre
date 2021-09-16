@@ -65,3 +65,11 @@ class CardView(APIView):
         """
         data = self.usecase.create(request.data)
         return Response(data=data, status=status.HTTP_201_CREATED)
+
+    @transaction.atomic
+    def delete(self, request: Request, card_id: int, format=None):
+        """
+        カードデータを削除する
+        """
+        data = self.usecase.delete(card_id)
+        return Response(data=data, status=status.HTTP_202_ACCEPTED)
