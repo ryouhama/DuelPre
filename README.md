@@ -19,6 +19,12 @@ EOS
 docker-compose up -d
 ```
 
+### 3. View api docs
+```
+http://localhost:8000/docs/
+```
+
+
 ### Commonly used
 
 #### poetry update
