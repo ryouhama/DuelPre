@@ -13,9 +13,13 @@ from injector import Binder, Injector, Module
 from card.adapters.repository.card_repository import CardRepository
 
 
-class CardFetchView(APIView):
+class CardListView(APIView):
     """
     カード一覧取得View
+
+    get:
+    一覧取得
+    リクエストのパラメータによって取得条件を得る
     """
     usecase: CardUsecase
 
@@ -35,10 +39,24 @@ class CardFetchView(APIView):
         data = self.usecase.fetch(request.data)
         return Response(data=data, status=status.HTTP_200_OK)
 
+    @transaction.atomic
+    def post(self, request: Request, format=None):
+        """
+        カードデータを作成する
+        """
+        data = self.usecase.create(request.data)
+        return Response(data=data, status=status.HTTP_201_CREATED)
+
 
 class CardView(APIView):
     """
     カードView
+
+    get:
+    カード1件取得
+
+    delete:
+    カード削除
     """
     usecase: CardUsecase
 
@@ -57,11 +75,3 @@ class CardView(APIView):
         """
         data = self.usecase.get(card_id)
         return Response(data=data, status=status.HTTP_200_OK)
-
-    @transaction.atomic
-    def post(self, request: Request, format=None):
-        """
-        カードデータを作成する
-        """
-        data = self.usecase.create(request.data)
-        return Response(data=data, status=status.HTTP_201_CREATED)
