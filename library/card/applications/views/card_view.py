@@ -5,7 +5,6 @@ from card.applications.repository_interface.card_repostiroy_interface \
     import CardRepositoryInterface
 from card.applications.usecases.card.usecase import CardUsecase
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.request import Request
@@ -14,9 +13,16 @@ from injector import Binder, Injector, Module
 from card.adapters.repository.card_repository import CardRepository
 
 
-class CardFetchView(APIView):
+class CardListView(APIView):
     """
     カード一覧取得View
+
+    get:
+    一覧取得
+    リクエストのパラメータによって取得条件を得る
+
+    post:
+    カード作成
     """
     usecase: CardUsecase
 
@@ -36,12 +42,25 @@ class CardFetchView(APIView):
         data = self.usecase.fetch(request.data)
         return Response(data=data, status=status.HTTP_200_OK)
 
+    @transaction.atomic
+    def post(self, request: Request, format=None):
+        """
+        カードデータを作成する
+        """
+        data = self.usecase.create(request.data)
+        return Response(data=data, status=status.HTTP_201_CREATED)
+
 
 class CardView(APIView):
     """
     カードView
+
+    get:
+    カード1件取得
+
+    delete:
+    カード削除
     """
-    permission_classes = [AllowAny]
     usecase: CardUsecase
 
     class InjectConfig(Module):
@@ -61,9 +80,9 @@ class CardView(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    def post(self, request: Request, format=None):
+    def delete(self, request: Request, card_id: int, format=None):
         """
-        カードデータを作成する
+        カードデータを削除する
         """
-        data = self.usecase.get(request.data)
-        return Response(data=data, status=status.HTTP_201_CREATED)
+        data = self.usecase.delete(card_id)
+        return Response(data=data, status=status.HTTP_202_ACCEPTED)

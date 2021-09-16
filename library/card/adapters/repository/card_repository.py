@@ -1,5 +1,7 @@
-from typing import Optional
-from django.db.models.query_utils import Q
+from typing import Any, Dict
+
+
+from card.adapters.adpter.card_condition_adapter import CardConditionAdapter
 from card.domains.factory.card_factory import CardFactory
 from card.applications.dto.conditions.card_conditions \
     import CardConditionDto
@@ -16,23 +18,29 @@ from card.serializers.card.serializer import (
 
 
 class CardRepository(CardRepositoryInterface):
+    """
+    カードデータを操作するRepositoryクラス
+    """
 
     def get(self, id: CardId) -> Card:
         model_card = models.Card.objects.get(id=id.value)
-        data = CardSerializer(instance=model_card, patial=True).data
-        return CardFactory().create(data)
+        data = CardSerializer(instance=model_card, partial=True).data
+        return CardFactory(data).create()
 
     def fetch_by_condition(self, dto: CardConditionDto) -> Cards:
+        adapter = CardConditionAdapter(dto)
         model_data = models.Card.objects.filter(
-            self.to_condition(dto)
+            adapter.to_query_condition()
         )
         related_model_data = CardFetchSerializer.eager_load(model_data)
         data = CardFetchSerializer(instance=related_model_data, many=True).data
         return Cards(
-            [CardFactory().create(it) for it in data]
+            [CardFactory(it).create() for it in data]
         )
 
-    def create(self, card: Card) -> None:
+    def create(self, input_data: Dict[str, Any]) -> Card:
+        card = CardFactory(input_data).create()
+
         card_data = card.to_dict()
         card_data.pop('id', None)
 
@@ -63,28 +71,9 @@ class CardRepository(CardRepositoryInterface):
             else:
                 raise Exception(card_civilization_serializer.errors)
 
-        return self.get(CardId(created_card.pk))
+        return CardFactory(created_card).create()
 
-    def to_condition(self, dto: CardConditionDto) -> Q:
-        conditions = None
-        if dto.id:
-            conditions = Q(id=dto.id)
-        if dto.keyward:
-            self.__add_conditions(
-                prev=conditions,
-                add=Q(name_startwith=dto.keyward)
-            )
-        if dto.civilizations:
-            values = [it for it in dto.civilizations]
-            add_condition = Q(civilization__civilizations__name_in=values)
-            self.__add_conditions(
-                prev=conditions,
-                add=add_condition
-            )
-        return conditions if conditions else Q()
-
-    def __add_conditions(self, prev: Optional[Q], add: Q) -> Q:
-        """
-        prev条件に、ANDでadd条件を追加する
-        """
-        return Q(prev, add) if prev else add
+    def delete(self, card_id: CardId) -> CardId:
+        instance: models.Card = models.Card.objects.get(id=card_id.value)
+        instance.delete()
+        return card_id

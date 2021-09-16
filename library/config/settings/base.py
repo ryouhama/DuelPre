@@ -22,7 +22,7 @@ DJANGO_READ_ENV_FILE = env.bool('DJANGO_READ_ENV_FILE', default=False)
 if DJANGO_READ_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     # ROOT_DIR=library.settings
-    ROOT_DIR = environ.Path(__file__) - 1
+    ROOT_DIR = environ.Path(__file__) - 4
     env.read_env(str(ROOT_DIR.path('.env')))
 
 
@@ -107,13 +107,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
-    )
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ),
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 AUTH_PASSWORD_VALIDATORS = [
