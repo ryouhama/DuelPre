@@ -1,7 +1,6 @@
 from typing import Any, Dict, List
 
 
-from card.domains.factory.card_factory import CardFactory
 from card.applications.repository_interface.card_repostiroy_interface \
     import CardRepositoryInterface
 from card.domains.domain.card.value_object import CardId
@@ -34,6 +33,10 @@ class CardUsecase():
         return [it.to_dict() for it in data.items]
 
     def create(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        card_obj = CardFactory(input_data).create()
-        data = self.card_repository.create(card_obj)
-        return data.to_dict()
+        data = self.card_repository.create(input_data)
+        return {'id': data.value}
+
+    def delete(self, card_id: int) -> Dict[str, Any]:
+        card_id_obj = CardId(card_id)
+        data = self.card_repository.delete(card_id_obj)
+        return {'id': data.value}

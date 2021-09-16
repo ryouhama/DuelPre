@@ -1,3 +1,6 @@
+from typing import Any, Dict
+
+
 from card.adapters.adpter.card_condition_adapter import CardConditionAdapter
 from card.domains.factory.card_factory import CardFactory
 from card.applications.dto.conditions.card_conditions \
@@ -15,6 +18,9 @@ from card.serializers.card.serializer import (
 
 
 class CardRepository(CardRepositoryInterface):
+    """
+    カードデータを操作するRepositoryクラス
+    """
 
     def get(self, id: CardId) -> Card:
         model_card = models.Card.objects.get(id=id.value)
@@ -32,7 +38,9 @@ class CardRepository(CardRepositoryInterface):
             [CardFactory(it).create() for it in data]
         )
 
-    def create(self, card: Card) -> None:
+    def create(self, input_data: Dict[str, Any]) -> Card:
+        card = CardFactory(input_data).create()
+
         card_data = card.to_dict()
         card_data.pop('id', None)
 
@@ -63,4 +71,9 @@ class CardRepository(CardRepositoryInterface):
             else:
                 raise Exception(card_civilization_serializer.errors)
 
-        return self.get(CardId(created_card.pk))
+        return CardFactory(created_card).create()
+
+    def delete(self, card_id: CardId) -> CardId:
+        instance: models.Card = models.Card.objects.get(id=card_id.value)
+        instance.delete()
+        return card_id

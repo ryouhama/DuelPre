@@ -20,6 +20,9 @@ class CardListView(APIView):
     get:
     一覧取得
     リクエストのパラメータによって取得条件を得る
+
+    post:
+    カード作成
     """
     usecase: CardUsecase
 
@@ -75,3 +78,11 @@ class CardView(APIView):
         """
         data = self.usecase.get(card_id)
         return Response(data=data, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    def delete(self, request: Request, card_id: int, format=None):
+        """
+        カードデータを削除する
+        """
+        data = self.usecase.delete(card_id)
+        return Response(data=data, status=status.HTTP_202_ACCEPTED)
